@@ -13,7 +13,7 @@ namespace ProvaPub.Services
             _ctx = ctx;
         }
 
-        public CustomerList ListCustomers(int page)
+        public PagedList<Customer> ListCustomers(int page)
         {
             int pageSize = 10;
             var skip = (page - 1) * pageSize;
@@ -23,7 +23,7 @@ namespace ProvaPub.Services
 
             var hasNext = totalCount > (page * pageSize);
 
-            return new CustomerList() { HasNext = hasNext, TotalCount = totalCount, Customers = customers };
+            return new PagedList<Customer>() { HasNext = hasNext, TotalCount = totalCount, Items = customers };
         }
 
         public async Task<bool> CanPurchase(int customerId, decimal purchaseValue)

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProvaPub.Models;
-using ProvaPub.Repository;
 using ProvaPub.Services;
 
 namespace ProvaPub.Controllers
@@ -28,13 +27,13 @@ namespace ProvaPub.Controllers
         }
 	
 		[HttpGet("products")]
-		public ProductList ListProducts(int page)
+		public PagedList<Product> ListProducts(int page)
 		{
 			return _productService.ListProducts(page);
 		}
 
 		[HttpGet("customers")]
-		public CustomerList ListCustomers(int page)
+		public PagedList<Customer> ListCustomers(int page)
 		{
 			return _customerService.ListCustomers(page);
 		}

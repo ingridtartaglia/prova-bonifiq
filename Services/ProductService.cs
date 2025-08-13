@@ -12,7 +12,7 @@ namespace ProvaPub.Services
 			_ctx = ctx;
 		}
 
-		public ProductList ListProducts(int page)
+		public PagedList<Product> ListProducts(int page)
 		{
             int pageSize = 10;
             var skip = (page - 1) * pageSize;
@@ -22,7 +22,7 @@ namespace ProvaPub.Services
 
 			var hasNext = totalCount > (page * pageSize);
 
-            return new ProductList() { HasNext = hasNext, TotalCount = totalCount, Products = products };
+            return new PagedList<Product>() { HasNext = hasNext, TotalCount = totalCount, Items = products };
 		}
 
 	}
