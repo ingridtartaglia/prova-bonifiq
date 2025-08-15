@@ -18,18 +18,38 @@ namespace ProvaPub.Controllers
     /// </summary>
     [ApiController]
 	[Route("[controller]")]
-	public class Parte3Controller :  ControllerBase
+	public class Parte3Controller : ControllerBase
 	{
-		[HttpGet("orders")]
+        private readonly OrderService _orderService;
+
+        public Parte3Controller(OrderService orderService)
+        {
+            _orderService = orderService;
+        }
+
+        [HttpGet("orders")]
 		public async Task<Order> PlaceOrder(string paymentMethod, decimal paymentValue, int customerId)
 		{
-            var contextOptions = new DbContextOptionsBuilder<TestDbContext>()
-    .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Teste;Trusted_Connection=True;")
-    .Options;
+            IPaymentMethod paymentStrategy;
 
-            using var context = new TestDbContext(contextOptions);
+            switch (paymentMethod.ToLower())
+            {
+                case "pix":
+                    paymentStrategy = new PixPaymentMethod();
+                    break;
+                case "creditcard":
+                    paymentStrategy = new CreditCardPaymentMethod();
+                    break;
+                case "paypal":
+                    paymentStrategy = new PaypalPaymentMethod();
+                    break;
+                default:
+                    throw new NotSupportedException("Not supported payment method");
+            }
 
-            return await new OrderService(context).PayOrder(paymentMethod, paymentValue, customerId);
-		}
-	}
+            var order = await _orderService.PayOrder(paymentStrategy, paymentValue, customerId);
+
+            return order;
+        }
+    }
 }
