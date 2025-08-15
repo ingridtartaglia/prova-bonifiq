@@ -1,4 +1,6 @@
-﻿using ProvaPub.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProvaPub.DTOs;
+using ProvaPub.Models;
 using ProvaPub.Repository;
 
 namespace ProvaPub.Services
@@ -12,7 +14,7 @@ namespace ProvaPub.Services
             _ctx = ctx;
         }
 
-        public async Task<Order> PayOrder(IPaymentMethod paymentMethod, decimal paymentValue, int customerId)
+        public async Task<OrderDto> PayOrder(IPaymentMethod paymentMethod, decimal paymentValue, int customerId)
 		{
             await paymentMethod.Pay(paymentValue, customerId);
 
@@ -21,7 +23,24 @@ namespace ProvaPub.Services
             await _ctx.Orders.AddAsync(order);
             await _ctx.SaveChangesAsync();
 
-            return order;
+            var savedOrder = await _ctx.Orders
+                                    .Include(o => o.Customer)
+                                    .ThenInclude(c => c.Orders)
+                                    .FirstOrDefaultAsync(o => o.Id == order.Id);
+
+            return new OrderDto
+            {
+                Id = savedOrder.Id,
+                Value = savedOrder.Value,
+                CustomerId = savedOrder.CustomerId,
+                OrderDate = savedOrder.OrderDate,
+                Customer = new CustomerDto
+                {
+                    Id = savedOrder.Customer.Id,
+                    Name = savedOrder.Customer.Name,
+                    OrdersCount = savedOrder.Customer.Orders?.Count ?? 0
+                }
+            };
         }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProvaPub.DTOs;
 using ProvaPub.Models;
 using ProvaPub.Services;
 
@@ -32,7 +33,7 @@ namespace ProvaPub.Controllers
 		}
 
 		[HttpGet("customers")]
-		public PagedList<Customer> ListCustomers(int page)
+		public PagedList<CustomerDto> ListCustomers(int page)
 		{
 			return _customerService.ListCustomers(page);
 		}

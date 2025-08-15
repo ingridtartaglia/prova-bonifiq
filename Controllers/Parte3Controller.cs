@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProvaPub.DTOs;
 using ProvaPub.Models;
 using ProvaPub.Services;
 
@@ -26,7 +27,7 @@ namespace ProvaPub.Controllers
         }
 
         [HttpGet("orders")]
-		public async Task<Order> PlaceOrder(string paymentMethod, decimal paymentValue, int customerId)
+		public async Task<OrderDto> PlaceOrder(string paymentMethod, decimal paymentValue, int customerId)
 		{
             IPaymentMethod paymentStrategy;
 
@@ -45,12 +46,12 @@ namespace ProvaPub.Controllers
                     throw new NotSupportedException("Not supported payment method");
             }
 
-            var order = await _orderService.PayOrder(paymentStrategy, paymentValue, customerId);
+            var orderDto = await _orderService.PayOrder(paymentStrategy, paymentValue, customerId);
 
             var brazilianTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
-            order.OrderDate = TimeZoneInfo.ConvertTimeFromUtc(order.OrderDate, brazilianTimeZone);
+            orderDto.OrderDate = TimeZoneInfo.ConvertTimeFromUtc(orderDto.OrderDate, brazilianTimeZone);
 
-            return order;
+            return orderDto;
         }
     }
 }
