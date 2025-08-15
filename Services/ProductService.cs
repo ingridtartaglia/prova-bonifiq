@@ -3,9 +3,9 @@ using ProvaPub.Repository;
 
 namespace ProvaPub.Services
 {
-	public class ProductService
-	{
-		TestDbContext _ctx;
+	public class ProductService : PaginationService<Product>
+    {
+        private readonly TestDbContext _ctx;
 
 		public ProductService(TestDbContext ctx)
 		{
@@ -14,16 +14,8 @@ namespace ProvaPub.Services
 
 		public PagedList<Product> ListProducts(int page)
 		{
-            int pageSize = 10;
-            var skip = (page - 1) * pageSize;
-            var totalCount = _ctx.Products.Count();
-
-			var products = _ctx.Products.Skip(skip).Take(pageSize).ToList();
-
-			var hasNext = totalCount > (page * pageSize);
-
-            return new PagedList<Product>() { HasNext = hasNext, TotalCount = totalCount, Items = products };
-		}
+            return GetPagedList(_ctx.Products, page);
+        }
 
 	}
 }

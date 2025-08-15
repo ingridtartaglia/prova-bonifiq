@@ -4,9 +4,9 @@ using ProvaPub.Repository;
 
 namespace ProvaPub.Services
 {
-    public class CustomerService
+    public class CustomerService : PaginationService<Customer>
     {
-        TestDbContext _ctx;
+        private readonly TestDbContext _ctx;
 
         public CustomerService(TestDbContext ctx)
         {
@@ -15,15 +15,7 @@ namespace ProvaPub.Services
 
         public PagedList<Customer> ListCustomers(int page)
         {
-            int pageSize = 10;
-            var skip = (page - 1) * pageSize;
-            var totalCount = _ctx.Customers.Count();
-
-            var customers = _ctx.Customers.Skip(skip).Take(pageSize).ToList();
-
-            var hasNext = totalCount > (page * pageSize);
-
-            return new PagedList<Customer>() { HasNext = hasNext, TotalCount = totalCount, Items = customers };
+            return GetPagedList(_ctx.Customers, page);
         }
 
         public async Task<bool> CanPurchase(int customerId, decimal purchaseValue)
