@@ -16,7 +16,7 @@ namespace ProvaPub.Services
 		{
             await paymentMethod.Pay(paymentValue, customerId);
 
-            var order = new Order() { Value = paymentValue, CustomerId = customerId };
+            var order = new Order() { Value = paymentValue, CustomerId = customerId, OrderDate = DateTime.UtcNow };
 
             await _ctx.Orders.AddAsync(order);
             await _ctx.SaveChangesAsync();

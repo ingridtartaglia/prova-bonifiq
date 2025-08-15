@@ -49,6 +49,9 @@ namespace ProvaPub.Controllers
 
             var order = await _orderService.PayOrder(paymentStrategy, paymentValue, customerId);
 
+            var brazilianTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            order.OrderDate = TimeZoneInfo.ConvertTimeFromUtc(order.OrderDate, brazilianTimeZone);
+
             return order;
         }
     }
