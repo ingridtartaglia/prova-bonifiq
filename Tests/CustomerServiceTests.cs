@@ -27,6 +27,7 @@ namespace ProvaPub.Tests
         {
             _ctx.Database.EnsureDeleted();
             _ctx.Dispose();
+            DateTimeProvider.Reset();
         }
 
         [Test]
@@ -99,6 +100,7 @@ namespace ProvaPub.Tests
             await _ctx.SaveChangesAsync();
 
             // Act
+            DateTimeProvider.Set(new DateTime(2025, 8, 15, 10, 0, 0, DateTimeKind.Utc));
             var result = await _customerService.CanPurchase(customerId, 99);
 
             // Assert
@@ -111,13 +113,14 @@ namespace ProvaPub.Tests
             // Arrange
             var customerId = 1;
             var customer = new Customer { Id = customerId, Name = "Customer" };
-            var order = new Order { CustomerId = customerId, OrderDate = DateTime.UtcNow.AddYears(-1), Value = 50 };
+            var order = new Order { CustomerId = customerId, OrderDate = DateTimeProvider.UtcNow.AddYears(-1), Value = 50 };
 
             _ctx.Customers.Add(customer);
             _ctx.Orders.Add(order);
             await _ctx.SaveChangesAsync();
 
             // Act
+            DateTimeProvider.Set(new DateTime(2025, 8, 15, 10, 0, 0, DateTimeKind.Utc));
             var result = await _customerService.CanPurchase(customerId, 100);
 
             // Assert
