@@ -6,18 +6,16 @@ namespace ProvaPub.Services
 {
 	public class RandomService
 	{
-        private readonly DbContextOptions<TestDbContext> _ctx;
+        private readonly TestDbContext _ctx;
 
-        public RandomService()
+        public RandomService(TestDbContext ctx)
         {
-            _ctx = new DbContextOptionsBuilder<TestDbContext>()
-                        .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Teste;Trusted_Connection=True;")
-                        .Options;
+            _ctx = ctx;
         }
 
         public async Task<int> GetRandom()
         {
-            using (var ctx = new TestDbContext(_ctx))
+            using (var ctx = _ctx)
             {
                 var random = new Random();
                 var generatedNumbers = new List<int>();
