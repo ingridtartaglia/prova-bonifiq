@@ -26,7 +26,7 @@ namespace ProvaPub.Services
 
             //Business Rule: Non registered Customers cannot purchase
             var customer = await _ctx.Customers.FindAsync(customerId);
-            if (customer == null) throw new InvalidOperationException($"Customer Id {customerId} does not exists");
+            if (customer == null) throw new InvalidOperationException($"Customer Id {customerId} does not exist");
 
             //Business Rule: A customer can purchase only a single time per month
             var baseDate = DateTime.UtcNow.AddMonths(-1);
@@ -43,9 +43,7 @@ namespace ProvaPub.Services
             if (DateTime.UtcNow.Hour < 8 || DateTime.UtcNow.Hour > 18 || DateTime.UtcNow.DayOfWeek == DayOfWeek.Saturday || DateTime.UtcNow.DayOfWeek == DayOfWeek.Sunday)
                 return false;
 
-
             return true;
         }
-
     }
 }
