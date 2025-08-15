@@ -4,10 +4,9 @@ using ProvaPub.Services;
 
 namespace ProvaPub.Controllers
 {
-	
 	[ApiController]
 	[Route("[controller]")]
-	public class Parte2Controller :  ControllerBase
+	public class Parte2Controller : ControllerBase
 	{
 		/// <summary>
 		/// Precisamos fazer algumas alterações:

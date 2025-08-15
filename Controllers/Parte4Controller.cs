@@ -5,7 +5,6 @@ using ProvaPub.Services;
 
 namespace ProvaPub.Controllers
 {
-	
 	/// <summary>
 	/// O Código abaixo faz uma chmada para a regra de negócio que valida se um consumidor pode fazer uma compra.
 	/// Crie o teste unitário para esse Service. Se necessário, faça as alterações no código para que seja possível realizar os testes.
@@ -16,9 +15,10 @@ namespace ProvaPub.Controllers
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
-	public class Parte4Controller :  ControllerBase
+	public class Parte4Controller : ControllerBase
 	{
-        TestDbContext _ctx;
+        private readonly TestDbContext _ctx;
+
         public Parte4Controller(TestDbContext ctx)
         {
             _ctx = ctx;

@@ -10,7 +10,7 @@ namespace ProvaPub.Controllers
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
-	public class Parte1Controller :  ControllerBase
+	public class Parte1Controller : ControllerBase
 	{
 		private readonly RandomService _randomService;
 
@@ -18,6 +18,7 @@ namespace ProvaPub.Controllers
 		{
 			_randomService = randomService;
 		}
+
 		[HttpGet]
 		public async Task<int> Index()
 		{
